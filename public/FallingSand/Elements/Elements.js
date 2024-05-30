@@ -39,6 +39,10 @@ class Element{
         var temp=newGameArray[i0];
         newGameArray[i0]=newGameArray[i1];
         newGameArray[i1]=temp;
+        if(newGameArray[i0] == undefined || newGameArray[i1] == undefined){
+            console.log(newGameArray[i0])
+            console.log(newGameArray[i1])
+        }
         updatedPositions.push(i1);
         updatedPositions.push(i0);
         return newGameArray
