@@ -1,5 +1,5 @@
 <head>
-    <title>A-Level Coursework</title>
+    <title>Wizards Pixel Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="./Assets/favicon.png">
     <!--Stylesheet from https://www.cdnfonts.com/public-pixel.font-->
@@ -7,24 +7,29 @@
     <script src="indexHTMLScript.js"></script>
 </head>
 <body class=" h-full bg-white text-black justify-center grow" style="background-image: url(./Assets/TitleScreen.jpg); background-size: 100% 100%;"></body>
+
     <div class="flex flex-col flex-grow justify-center h-dvh">
+
         <div class="flex flex-row justify-center h-3/20">
             <div class="text-base sm:text-3xl md:text-4xl lg:text-5xl xl:text-8xl text-amber-300 font-bold  text-center w-4/5" style="font-family: Public Pixel; -webkit-text-stroke: 3px black;">Cellular Automata Simulator</div>
         </div>
+
         <div class="flex flex-row justify-center h-1/8 text-sm">
             <div style="font-family: Public Pixel; " class="text-lg">By Daniel McClean</div>
         </div>
+
         <div class="flex flex-row justify-center items-center h-3/5 content-around">
             <button onclick=goToFallingSand() class=" bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 hover:bg-amber-300 hover:text-black border-2  px-4 m-2 rounded w-1/3 h-2/3 text-lg" style="font-family: Public Pixel;">Falling Sand</button>    
             <div class="w-1/6"></div>        
             <button onclick=goToGameOfLife() class=" bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 hover:bg-amber-300 hover:text-black border-2  px-4 m-2 rounded w-1/3 h-2/3 text-lg" style="font-family: Public Pixel;">Game Of Life</button>
         </div>
        
-        
         <p class="object-left-bottom h-1/8 text-xs" style="font-family: Public Pixel;" >Created 25/10/2023</p>
+
         <audio id="clickSound">
-            <source src="../Assets/ClickSound.mp3" type="audio/mpeg">
+          <source src="../Assets/ClickSound.mp3" type="audio/mpeg">
         </audio>
+
     </div>   
     
 </body>
