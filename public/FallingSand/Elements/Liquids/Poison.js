@@ -9,8 +9,7 @@ class Poison extends Liquid{
     gasState= "steam";
     colour=0x8515C7;
 
-    move(i, gameArray, canvasData, newGameArray, updatedPositions){
-        var velocity=this.getAlpha(gameArray, i)
+    moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity){
         var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width);
         if(this.density>belowElement.density || this.poisonStrength >belowElement.poisonResistance){
             for(var j=0; j<velocity; j++){
@@ -38,27 +37,10 @@ class Poison extends Liquid{
             newGameArray =this.updateAlphaByte(newGameArray, velocity, i)
             return newGameArray;
         }
-        
-        var dir=Math.random() < 0.5;
-        if(dir){
-            if(i+canvasData.width+1<canvasData.width*canvasData.height && updatedPositions.indexOf(i+canvasData.width+1)==-1 && i%canvasData.width!=canvasData.width-1){
-                var adjacentElement = this.getNeighbourElement(gameArray, i+1);
-                if(this.density>adjacentElement.density){
-                    var destinationElement=this.getNeighbourElement(gameArray, i+canvasData.width+1);
-                    if(this.density>destinationElement.density || this.poisonStrength>destinationElement.poisonResistance){
-                        if(this.poisonStrength>destinationElement.poisonResistance){
-                            newGameArray=this.swapPositionsPoison(newGameArray, updatedPositions, i, i+canvasData.width+1)
-                            return newGameArray
-                        }
-                        else{
-                            newGameArray=this.swapPositionsLiquid(newGameArray, updatedPositions, i, i+canvasData.width+1)
-                            return newGameArray
-                        }
-                    }
-                }
-                
-            }
-        }
+        return -1;
+    }
+
+    moveDownDiagonalLeft(i, gameArray, canvasData, newGameArray, updatedPositions){
         if(i+canvasData.width-1<canvasData.width*canvasData.height && updatedPositions.indexOf(i+canvasData.width-1)==-1 && i%canvasData.width!=0){
             var adjacentElement=this.getNeighbourElement(gameArray, i-1);
             if(this.density>adjacentElement.density){
@@ -75,28 +57,10 @@ class Poison extends Liquid{
                 }
             }
         }
-        dir=Math.random() < 0.5;
-        if(dir){
-            for(var j=0; j<this.dispertionRate; j++){
-                var adjacentElement = this.getNeighbourElement(newGameArray, i+1);
-                var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width)
-                if(this.density>adjacentElement.density && this.density<=belowElement.density && updatedPositions.includes(i+1)==false && i%canvasData.width!=canvasData.width-1 || this.poisonStrength>adjacentElement.poisonResistance){
-                        if(this.poisonStrength>adjacentElement.poisonResistance){
-                            newGameArray=this.swapPositionsPoison(newGameArray, updatedPositions, i, i+1)
-                            return newGameArray;
-                        }
-                        else{
-                            newGameArray=this.swapPositionsLiquid(newGameArray, updatedPositions, i, i+1)
-                        }
-                        i=i+1
-                    }
-                else{
-                    return newGameArray
-                }
-            }
-            
-            
-        }
+        return -1
+    }
+
+    moveHorizontalLeft(i, gameArray, canvasData, newGameArray, updatedPositions){
         for(var j=0; j<this.dispertionRate; j++){
             var adjacentElement = this.getNeighbourElement(newGameArray, i-1);
             var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width)
@@ -114,7 +78,48 @@ class Poison extends Liquid{
                 return newGameArray;
             }
         }
-        return newGameArray;
+        return -1;
+    }
+
+    moveDownDiagonalRight(i, gameArray, canvasData, newGameArray, updatedPositions){
+        if(i+canvasData.width+1<canvasData.width*canvasData.height && updatedPositions.indexOf(i+canvasData.width+1)==-1 && i%canvasData.width!=canvasData.width-1){
+            var adjacentElement = this.getNeighbourElement(gameArray, i+1);
+            if(this.density>adjacentElement.density){
+                var destinationElement=this.getNeighbourElement(gameArray, i+canvasData.width+1);
+                if(this.density>destinationElement.density || this.poisonStrength>destinationElement.poisonResistance){
+                    if(this.poisonStrength>destinationElement.poisonResistance){
+                        newGameArray=this.swapPositionsPoison(newGameArray, updatedPositions, i, i+canvasData.width+1)
+                        return newGameArray
+                    }
+                    else{
+                        newGameArray=this.swapPositionsLiquid(newGameArray, updatedPositions, i, i+canvasData.width+1)
+                        return newGameArray
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    moveHorizontalRight(i, gameArray, canvasData, newGameArray, updatedPositions){
+        for(var j=0; j<this.dispertionRate; j++){
+            var adjacentElement = this.getNeighbourElement(newGameArray, i+1);
+            var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width)
+            if(this.density>adjacentElement.density && this.density<=belowElement.density && updatedPositions.includes(i+1)==false && i%canvasData.width!=canvasData.width-1 || this.poisonStrength>adjacentElement.poisonResistance){
+                if(this.poisonStrength>adjacentElement.poisonResistance){
+                    newGameArray=this.swapPositionsPoison(newGameArray, updatedPositions, i, i+1)
+                    return newGameArray;
+                }
+                else{
+                    newGameArray=this.swapPositionsLiquid(newGameArray, updatedPositions, i, i+1)
+                }
+                i=i+1
+            }
+            else{
+                return newGameArray
+            }
+        }
+        return -1;
     }
 }
 
