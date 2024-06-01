@@ -1,13 +1,20 @@
 import { Liquid } from "./Liquid.js";
 
 class Poison extends Liquid{
-    poisonStrength=0.5;
+
     density=999.99;
     acidResistance=0.3;
+    acidStrength=0;
+    poisonResistance=1;
+    poisonStrength=0.5;
     dispertionRate=50;
     terminalVelocity=3;
+    inertialResistance=0;
     gasState= "steam";
     colour=0x8515C7;
+    fireResistance=1000;
+    flammable=false;
+    liquidState="";
 
     moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity){
         var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width);

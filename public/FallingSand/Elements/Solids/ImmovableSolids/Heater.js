@@ -4,7 +4,20 @@ import {ImmovableSoild} from "./ImmovableSolid.js";
 import { getElementByName} from "../../../nameElementMap.js"
 
 class Heater extends ImmovableSoild{
+    
+    density = Infinity;
+    acidResistance=1;
+    acidStrength=0;
+    poisonResistance=1;
+    poisonStrength=0;
+    inertialResistance=0;
+    terminalVelocity=0;
     colour=0x0000FF;
+    fireResistance=1000;
+    flammable=false;
+    dispertionRate=0;
+    gasState="";
+    liquidState="";
 
     move(i, gameArray, canvasData, newGameArray, updatedPosition){
         for(var j=-1; j<2; j++){
@@ -26,10 +39,12 @@ class Heater extends ImmovableSoild{
     }
 
     changeStateToGas(neighbour, newGameArray, nextIndex){
-        var gasState=getElementByName(neighbour.gasState);
-        var alpha = Math.floor(Math.random() * 15+206);
-        var colour= gasState.colour | (alpha<<24);
-        newGameArray[nextIndex]=colour;
+        if(neighbour.gasState != ""){
+            var gasState=getElementByName(neighbour.gasState);
+            var alpha = Math.floor(Math.random() * 15+206);
+            var colour= gasState.colour | (alpha<<24);
+            newGameArray[nextIndex]=colour;
+        }
         return newGameArray
     }
 }

@@ -1,13 +1,19 @@
 import { getElement } from "../ElementColourMap.js";
 
 class Element{
+    
     density;
     acidResistance;
-    poisonResistance=1;
+    acidStrength;
+    poisonResistance;
+    poisonStrength;
     terminalVelocity;
+    inertialResistance;
     colour;
-    fireResistance=1000;
-    burnTime=0x0;
+    fireResistance;
+    flammable;
+    dispertionRate;
+    gasState;
 
     move(i, gameArray, canvasData, newGameArray, updatedPositions){
         return newGameArray;

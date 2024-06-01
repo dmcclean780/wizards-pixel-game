@@ -2,8 +2,6 @@ import { Element } from "../Elements.js";
 import { Solid } from "../Solids/Solid.js";
 
 class Gas extends Element {
-    dispertionRate;
-    liquidState;
 
     move(i, gameArray, canvasData, newGameArray, updatedPositions) {
         

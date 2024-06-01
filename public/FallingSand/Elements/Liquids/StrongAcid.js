@@ -1,11 +1,20 @@
 import { Acid } from "./Acid.js"
 
 class StrongAcid extends Acid{
-    acidStrength=1;
+    
+    density=1;
     acidResistance=1;
+    acidStrength=1;
+    poisonResistance=1;
+    poisonStrength=0;
     terminalVelocity=3;
-    gasState= "steam";
+    inertialResistance=0;
     colour=0x00FF00;
+    fireResistance=1000;
+    flammable=false;
+    dispertionRate=50;
+    gasState= "steam";
+    liquidState="";
 }
 
 export{StrongAcid}

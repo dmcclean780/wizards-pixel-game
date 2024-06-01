@@ -3,12 +3,18 @@ import { Liquid } from "./Liquid.js";
 
 class Acid extends Liquid{
     density=1;
-    dispertionRate=50;
     acidStrength=0.5;
     acidResistance=0.5;
+    poisonResistance=1;
+    poisonStrength=0;
     terminalVelocity=3;
-    gasState= "steam";
+    inertialResistance=0;
     colour=0x2FFFAD;
+    fireResistance=1000;
+    flammable=false;
+    dispertionRate=50;
+    gasState= "steam";
+    liquidState="";
 
     moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity) {
         var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width);
