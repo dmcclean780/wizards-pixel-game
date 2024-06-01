@@ -71,10 +71,16 @@ class Element{
     }
 
     updateAlphaByte(newGameArray, alphaByte, i){
+       
         var colour=newGameArray[i];
+        if(newGameArray.includes(undefined)){
+            console.log("after alpha")
+        }
         colour&=0xf0ffffff;
         colour=colour | (alphaByte<<24);
+       
         newGameArray[i]=colour;
+        
         return newGameArray;
     }
 

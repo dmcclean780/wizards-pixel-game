@@ -65,15 +65,15 @@ class SolidFire extends Element {
                     }
                 }
             }
-            var fireDecrease = Math.random() * 1000 > 950
-            if (fireDecrease) {
-                fireLife--
-            }
-            if (fireLife == 0) {
-                newGameArray[i] = 0x00000000;
-            }
-            newGameArray = this.updateAlphaByte(newGameArray, fireLife, i);
         }
+        var fireDecrease = Math.random() * 1000 > 950
+        if (fireDecrease) {
+            fireLife--
+        }
+        if (fireLife == 0) {
+            newGameArray[i] = 0x00000000;
+        }
+        newGameArray = this.updateAlphaByte(newGameArray, fireLife, i);
         return newGameArray
     }
 }
