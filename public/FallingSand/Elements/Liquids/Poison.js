@@ -15,6 +15,7 @@ class Poison extends Liquid{
     fireResistance=1000;
     flammable=false;
     liquidState="";
+    resistivity=1;
 
     moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity){
         var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width);

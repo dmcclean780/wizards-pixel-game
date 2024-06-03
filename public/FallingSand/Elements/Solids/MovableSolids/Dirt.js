@@ -15,6 +15,7 @@ class Dirt extends MovableSolid{
     dispertionRate=0;
     gasState="";
     liquidState="";
+    resistivity=10;
 
 }
 

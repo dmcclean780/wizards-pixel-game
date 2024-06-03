@@ -15,6 +15,7 @@ class Steam extends Gas{
     dispertionRate=50;
     gasState="";
     liquidState="water";
+    resistivity=1.3;
 }
 
 export{Steam};

@@ -18,6 +18,7 @@ class Heater extends ImmovableSoild{
     dispertionRate=0;
     gasState="";
     liquidState="";
+    resistivity=100;
 
     move(i, gameArray, canvasData, newGameArray, updatedPosition){
         for(var j=-1; j<2; j++){

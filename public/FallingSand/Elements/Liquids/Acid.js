@@ -15,6 +15,7 @@ class Acid extends Liquid{
     dispertionRate=50;
     gasState= "steam";
     liquidState="";
+    resistivity=1;
 
     moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity) {
         var belowElement = this.getNeighbourElement(gameArray, i+canvasData.width);

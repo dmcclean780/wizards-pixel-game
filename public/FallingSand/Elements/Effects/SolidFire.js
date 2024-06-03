@@ -1,10 +1,8 @@
-import { Liquid } from "./Liquids/Liquid.js";
-import { Element } from "./Elements.js";
-import { Oil } from "./Liquids/Oil.js";
-import { Empty } from "./Empty.js";
-import { getElementByName } from "../nameElementMap.js";
-import { MovableSolid } from "./Solids/MovableSolids/MovableSolid.js";
-import { ImmovableSoild } from "./Solids/ImmovableSolids/ImmovableSolid.js";
+import { Liquid } from "../Liquids/Liquid.js";
+import { Element } from "../Elements.js";
+import { Empty } from "../Empty.js";
+import { getElementByName } from "../../nameElementMap.js";
+import { MovableSolid } from "../Solids/MovableSolids/MovableSolid.js";
 
 class SolidFire extends Element {
     colour = [0x008CF1, 0x0045F1, 0x00A5F1, 0x00D7F1, 0x00CDF1, 0x004DF1, 0x00D5F1];

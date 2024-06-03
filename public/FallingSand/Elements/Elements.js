@@ -2,18 +2,20 @@ import { getElement } from "../ElementColourMap.js";
 
 class Element{
     
-    density;
-    acidResistance;
-    acidStrength;
-    poisonResistance;
-    poisonStrength;
-    terminalVelocity;
-    inertialResistance;
-    colour;
-    fireResistance;
-    flammable;
-    dispertionRate;
-    gasState;
+    density; //Integer positive for solids and liquids, negative for gases
+    acidResistance; //value between 0 and 1
+    acidStrength; //value between 0 and 1
+    poisonResistance; //value between 0 and 1
+    poisonStrength; //value between 0 and 1
+    terminalVelocity; //value between 0 and 9
+    inertialResistance; //value between 0 and 1
+    colour; //Hex number or array of hex numbers
+    fireResistance; //value between 0 and 1000
+    flammable; //Boolean value
+    dispertionRate; //Positive Integer value 
+    gasState; // String
+    liquidState; //String
+    resistivity; //Positive value
 
     move(i, gameArray, canvasData, newGameArray, updatedPositions){
         return newGameArray;

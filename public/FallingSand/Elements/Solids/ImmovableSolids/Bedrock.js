@@ -14,6 +14,7 @@ class Bedrock extends ImmovableSoild{
     dispertionRate=0;
     gasState="";
     liquidState="";
+    resistivity=100;
 }
 
 export {Bedrock};

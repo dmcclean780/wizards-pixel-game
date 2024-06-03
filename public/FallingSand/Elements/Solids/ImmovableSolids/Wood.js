@@ -15,6 +15,7 @@ class Wood extends ImmovableSoild{
     dispertionRate=0;
     gasState="";
     liquidState="";
+    resistivity=3000;
 }
 
 export{Wood}

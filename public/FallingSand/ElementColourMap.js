@@ -13,8 +13,9 @@ import { Dirt } from "./Elements/Solids/MovableSolids/Dirt.js";
 import { Steam } from "./Elements/Gases/Steam.js";
 import { Heater } from "./Elements/Solids/ImmovableSolids/Heater.js";
 import { Cooler } from "./Elements/Solids/ImmovableSolids/Cooler.js";
-import {LiquidFire } from "./Elements/LiquidFire.js";
-import { SolidFire } from "./Elements/SolidFire.js";
+import {LiquidFire } from "./Elements/Effects/LiquidFire.js";
+import { SolidFire } from "./Elements/Effects/SolidFire.js";
+import { Lightning } from "./Elements/Effects/Lighting.js"
 
 var colorToElementMap = {
     0x000000: new Empty(),
@@ -47,6 +48,7 @@ var colorToElementMap = {
     0x00CDF1: new SolidFire(),
     0x004DF1: new SolidFire(),
     0x00D5F1: new SolidFire(),
+    //0xFFF97D: new Lightning(),
 }
 
 function getElement(color) {

@@ -15,6 +15,7 @@ class Stone extends ImmovableSoild{
     dispertionRate=0;
     gasState="";
     liquidState="";
+    resistivity=10;
 }
 
 export{Stone}

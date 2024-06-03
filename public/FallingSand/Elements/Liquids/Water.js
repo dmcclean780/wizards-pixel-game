@@ -19,6 +19,7 @@ class Water extends Liquid{
     dispertionRate=50;
     gasState= "steam";
     liquidState="";
+    resistivity=1;
     
 }
 

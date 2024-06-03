@@ -1,8 +1,8 @@
-import { Element } from "./Elements.js";
-import { getElementByName } from "../nameElementMap.js";
-import { Liquid } from "./Liquids/Liquid.js";
-import { Empty } from "./Empty.js";
-import { MovableSolid } from "./Solids/MovableSolids/MovableSolid.js";
+import { Element } from "../Elements.js";
+import { getElementByName } from "../../nameElementMap.js";
+import { Liquid } from "../Liquids/Liquid.js";
+import { Empty } from "../Empty.js";
+import { MovableSolid } from "../Solids/MovableSolids/MovableSolid.js";
 
 class LiquidFire extends Element {
     colour = [0x008CFF, 0x0045FF, 0x00A5FF, 0x00D7FF, 0x00CDFF, 0x004DFF, 0x00D5FF];

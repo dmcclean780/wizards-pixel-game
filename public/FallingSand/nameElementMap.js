@@ -11,8 +11,8 @@ import { Bedrock } from "./Elements/Solids/ImmovableSolids/Bedrock.js";
 import { Coal } from "./Elements/Solids/MovableSolids/Coal.js";
 import { Dirt } from "./Elements/Solids/MovableSolids/Dirt.js";
 import { Steam } from "./Elements/Gases/Steam.js";
-import { LiquidFire } from "./Elements/LiquidFire.js";
-import { SolidFire } from "./Elements/SolidFire.js";
+import { LiquidFire } from "./Elements/Effects/LiquidFire.js";
+import { SolidFire } from "./Elements/Effects/SolidFire.js";
 
 var nameToElementMap = {
     "empty": new Empty(),

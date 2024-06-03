@@ -15,6 +15,7 @@ class Oil extends Liquid{
     dispertionRate=30;
     gasState="oil"
     liquidState="";
+    resistivity=0.8;
 }
 
 export {Oil}

@@ -17,7 +17,7 @@ function coordToIndex(x,y,canvasData){
 function indexToCoord(index,canvasData){
     var y = Math.floor(index/canvasData.width);
     var x = modulo(index, canvasData.width);
-    var coord = [x,y];
+    let coord={x:x, y:y}
     return coord;
 }
 

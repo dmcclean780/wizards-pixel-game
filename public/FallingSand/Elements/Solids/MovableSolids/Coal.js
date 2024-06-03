@@ -14,6 +14,7 @@ class Coal extends MovableSolid{
     dispertionRate=0;
     gasState="";
     liquidState="";
+    resistivity=300;
 }
 
 export{Coal};

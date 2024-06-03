@@ -15,6 +15,7 @@ class StrongAcid extends Acid{
     dispertionRate=50;
     gasState= "steam";
     liquidState="";
+    resistivity=1;
 }
 
 export{StrongAcid}
