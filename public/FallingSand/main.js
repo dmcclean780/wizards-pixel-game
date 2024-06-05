@@ -7,15 +7,16 @@ import { renderArray } from "../utils/canvasOutput.js";
 import { CanvasData } from "../utils/canvasData.js";
 import { DrawingData } from "../utils/DrawingData.js";
 import {step} from "./step.js";
+import { createChunks } from "../utils/chunkList.js";
 
 //Code to decalare the variables that must have a global scope
 let elementSelector;
-let gameArray;
+let currentChunks;
 let value =0;
 let stopSim=false;
 let speed;
 let canvasData;
-let newGameArray;
+let newChunks;
 var genNoHTML;
 var genNo=0;
 var startTime=0;
@@ -30,8 +31,8 @@ window.addEventListener("load", (event)=>{
   audioElement.play();
   
   setCanvasObj();
-  gameArray=createArray(canvasData);
-  newGameArray=createArray(canvasData);
+  currentChunks=createChunks(canvasData);
+  newChunks=createChunks(canvasData);
   genNoHTML =document.getElementById("genNo.");
   fpsHTML=document.getElementById("fpsMeter");
   elementSelector=document.getElementById("element-select");
@@ -39,41 +40,45 @@ window.addEventListener("load", (event)=>{
     event.stopPropagation()
     var mouseEvent=true;
     var drawingData= getDrawingData(event, mouseEvent);
-    startPainting(drawingData, gameArray, canvasData);
+    startPainting(drawingData, currentChunks, canvasData);
   } );
 
   canvas.addEventListener('mouseup', (event)=> {
     event.stopPropagation()
-    stopPainting(gameArray, canvasData)
+    stopPainting(currentChunks, canvasData)
   });
 
   canvas.addEventListener('mousemove', (event)=>{
     event.stopPropagation()
     var mouseEvent=true;
     var drawingData= getDrawingData(event, mouseEvent);
-    sketch(drawingData, gameArray, canvasData)
+    sketch(drawingData, currentChunks, canvasData)
   } );
 
   canvas.addEventListener('touchstart', (event)=>{
     event.stopPropagation()
     var mouseEvent=false;
     var drawingData= getDrawingData(event, mouseEvent);
-    startPainting(drawingData, gameArray, canvasData)
+    startPainting(drawingData, currentChunks, canvasData)
   } );
 
   canvas.addEventListener('touchend', (event)=> {
     event.stopPropagation()
-    stopPainting(gameArray, canvasData)}
+    stopPainting(currentChunks, canvasData)}
   );
 
   canvas.addEventListener('touchmove', (event)=>{
     event.stopPropagation()
     var mouseEvent=false;
     var drawingData= getDrawingData(event, mouseEvent);
-    sketch(drawingData, gameArray, canvasData)
+    sketch(drawingData, currentChunks, canvasData)
   } );
+  //canvasData.ctx.translate(100, 100);
+  canvasData.ctx.fillStyle = "green";
+  canvasData.ctx.fillRect(-100,-100,100,100)
+  canvasData.ctx.translate(10, 10);
 
-  run();
+  //run();
 })
 
 window.addEventListener("resize", (event)=>{setCanvasObj();})
@@ -108,19 +113,19 @@ function setCanvasObj(){
 
 //Procedure to move the game on 1 generation
 function stepGame(){
-  var swap = step(gameArray, canvasData, newGameArray);
-  newGameArray=gameArray;
-  gameArray=swap;
+  var swap = step(currentChunks, canvasData, newChunks);
+  newChunks=currentChunks;
+  currentChunks=swap;
   genNo++
   genNoHTML.innerHTML=genNo;
-  renderArray(canvasData, gameArray);
+  renderArray(canvasData, currentChunks);
 }
 
 //Procedure to reset the game
 function reset(){
   stop();
-  gameArray=createArray(canvasData);
-  renderArray(canvasData, gameArray);
+  currentChunks=createArray(canvasData);
+  renderArray(canvasData, currentChunks);
   genNo = 0;
   genNoHTML.innerHTML=genNo;
 }
