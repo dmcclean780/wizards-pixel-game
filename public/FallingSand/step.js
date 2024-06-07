@@ -73,15 +73,19 @@ function updateNeighbourChunks(newChunks, newNeighbourChunksContent, x, y){
 
 function executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize){
     var updatedPositions=[];
-    //console.log(newNeighbourChunks)
+    var nextUpdateStatus = false;
     for(var i=0; i<theChunkContent.length; i++){
         var colour=theChunkContent[i];
         colour &= 0x00ffffff;
         var element=getElement(colour);
         
        var allChunks=element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize);
+       var newChunkNeedUpdated= allChunks[1];
+       if(newChunkNeedUpdated == true){
+        nextUpdateStatus =true;
+       }
     }
-    //console.log("all", allChunks)
+    allChunks[1] = nextUpdateStatus;
     return allChunks
 }
 

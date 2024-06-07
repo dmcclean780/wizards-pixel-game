@@ -12,7 +12,6 @@ function createChunks(canvasData){
             chunkList[i][j]=new GameChunk([i,j])
         }
     }
-    console.log(chunkList)
     return chunkList
 }
 

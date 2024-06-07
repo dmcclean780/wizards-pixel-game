@@ -18,7 +18,7 @@ class Element{
     resistivity; //Positive value
 
     move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
-        var newChunkUpdateStatus = true
+        var newChunkUpdateStatus = false
         var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
         return allChunks
     }
