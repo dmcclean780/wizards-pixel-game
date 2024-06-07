@@ -42,7 +42,8 @@ class MovableSolid extends Solid {
             }
         }
 */
-        var allChunks= [newChunkContent, neighbourChunksContent]
+        var newChunkUpdateStatus = false
+        var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
         return allChunks
 
     }
@@ -64,7 +65,8 @@ class MovableSolid extends Solid {
                         if(this.density > belowElement.density && !(belowElement instanceof Solid)){
                             [newChunkContent, newBelowChunkContent]=this.swapPositionsBetweenChunk(newChunkContent, newBelowChunkContent, updatedPositions, i, i%chunkSize)
                             neighbourChunksContent[4]=newBelowChunkContent
-                            var allChunks= [newChunkContent, neighbourChunksContent]
+                            var newChunkUpdateStatus = true
+                            var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
                             return allChunks
                         }
                     }
@@ -82,7 +84,8 @@ class MovableSolid extends Solid {
             }
 
             newChunkContent= this.updateAlphaByte(newChunkContent, velocity, i)
-            var allChunks= [newChunkContent, neighbourChunksContent]
+            var newChunkUpdateStatus = true
+            var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
             return allChunks
         }
         return -1;

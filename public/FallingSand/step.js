@@ -15,9 +15,13 @@ function step(currentChunks, canvasData, newChunks){
                 var newNeighbourChunksContent =  findNeighbourChunksContent(newChunks, i, j)
                 var allChunks= executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
                 newChunkContent=allChunks[0]
-                newNeighbourChunksContent=allChunks[1];
-                newChunks[i][j].content=newChunkContent;
-                newChunks=updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
+                var newChunkUpdateStatus=allChunks[1]
+                newNeighbourChunksContent=allChunks[2];
+                newChunks[i][j].needUpdated=newChunkUpdateStatus;
+                if(newChunkUpdateStatus){
+                    newChunks[i][j].content=newChunkContent;
+                    newChunks=updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
+                }
             }
         }
     }

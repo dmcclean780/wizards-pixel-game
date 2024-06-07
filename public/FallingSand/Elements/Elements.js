@@ -18,7 +18,8 @@ class Element{
     resistivity; //Positive value
 
     move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
-        var allChunks= [newChunkContent, newNeighbourChunksContent]
+        var newChunkUpdateStatus = true
+        var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
         return allChunks
     }
     swapPositions(newChunkContent, updatedPositions, i0, i1){
