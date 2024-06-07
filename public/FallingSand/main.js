@@ -73,10 +73,6 @@ window.addEventListener("load", (event)=>{
     var drawingData= getDrawingData(event, mouseEvent);
     sketch(drawingData, currentChunks, canvasData)
   } );
-  //canvasData.ctx.translate(100, 100);
-  canvasData.ctx.fillStyle = "green";
-  canvasData.ctx.fillRect(-100,-100,100,100)
-  canvasData.ctx.translate(10, 10);
 
   //run();
 })
@@ -93,11 +89,11 @@ function getDrawingData(event, mouseEvent){
       var clientY = event.touches[0].clientY;
       var clientX = event.touches[0].clientX;
     }
-  var colour=elementSelector.value;
-  var alpha = Math.floor(Math.random() * 15+206);
-  colour=colour | (alpha<<24);
-  colour&=0xf0ffffffff;
-  var drawingData = new DrawingData(rect, clientX, clientY, colour);
+    var colour=elementSelector.value;
+    var alpha = Math.floor(Math.random() * 15+206);
+    colour=colour | (alpha<<24);
+    colour&=0xf0ffffffff;
+    var drawingData = new DrawingData(rect, clientX, clientY, colour);
   return drawingData;
 }
 
@@ -124,7 +120,7 @@ function stepGame(){
 //Procedure to reset the game
 function reset(){
   stop();
-  currentChunks=createArray(canvasData);
+  currentChunks=createChunks(canvasData);
   renderArray(canvasData, currentChunks);
   genNo = 0;
   genNoHTML.innerHTML=genNo;

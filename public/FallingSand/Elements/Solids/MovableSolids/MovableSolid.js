@@ -5,17 +5,17 @@ import { Solid } from "../Solid.js";
 class MovableSolid extends Solid {
     
 
-    move(i, gameArray, canvasData, newGameArray, updatedPositions){
+    move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
 
-        var velocity = this.getAlpha(gameArray, i)
-
-        var moveDownPossible=this.moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity);
+        var velocity = this.getAlpha(theChunkContent, i)
+        //console.log(velocity)
+        var moveDownPossible=this.moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, updatedPositions, velocity, chunkSize);
         if(!Number.isInteger(moveDownPossible)){
             return moveDownPossible;
         }
 
         var dir = Math.random() < 0.5;
-        
+        /*
         if (dir) {
 
             var moveHorizontalRightPossible=this.moveHorizontalRight(i, canvasData, newGameArray, updatedPositions, velocity)
@@ -41,31 +41,49 @@ class MovableSolid extends Solid {
                 return moveDownDiagonalLeftPossible
             }
         }
-
-        return newGameArray;
+*/
+        var allChunks= [newChunkContent, neighbourChunksContent]
+        return allChunks
 
     }
 
-    moveDown(i, gameArray, canvasData, newGameArray, updatedPositions, velocity) {
-        var belowElement = this.getNeighbourElement(gameArray, i + canvasData.width)
+    moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, updatedPositions, velocity, chunkSize) {
+        var belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
         if (this.density > belowElement.density) {
             for (var j = 0; j < velocity; j++) {
-                var belowElement = this.getNeighbourElement(gameArray, i + canvasData.width)
-                if (this.density > belowElement.density && !(belowElement instanceof Solid) && updatedPositions.includes(i + canvasData.width) == false && i + canvasData.width < canvasData.width * canvasData.height) {
-                    newGameArray = this.swapPositions(newGameArray, updatedPositions, i, i + canvasData.width)
-                    i = i + canvasData.width
+                var belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
+                if (this.density > belowElement.density && !(belowElement instanceof Solid) && updatedPositions.includes(i + chunkSize) == false && i + chunkSize < chunkSize *  chunkSize) {
+                    newChunkContent= this.swapPositions(newChunkContent, updatedPositions, i, i +  chunkSize)
+                    i = i +  chunkSize
                 }
                 else {
+                    var belowChunkContent = neighbourChunksContent[4]
+                    var newBelowChunkContent = newNeighbourChunksContent[4]
+                    if(belowChunkContent != -1){
+                        belowElement=this.getNeighbourElement(belowChunkContent, i%chunkSize)
+                        if(this.density > belowElement.density && !(belowElement instanceof Solid)){
+                            [newChunkContent, newBelowChunkContent]=this.swapPositionsBetweenChunk(newChunkContent, newBelowChunkContent, updatedPositions, i, i%chunkSize)
+                            neighbourChunksContent[4]=newBelowChunkContent
+                            var allChunks= [newChunkContent, neighbourChunksContent]
+                            return allChunks
+                        }
+                    }
+                    /*
                     velocity = 9 - velocity;
-                    newGameArray = this.updateAlphaByte(newGameArray, velocity, i);
-                    return newGameArray
+                    
+                    newChunkContent.content = this.updateAlphaByte(newChunkContent.content, velocity, i);
+                    var allChunks= [newChunkContent, neighbourChunksContent]
+                    return allChunks
+                    */
                 }
             }
             if (velocity < this.terminalVelocity) {
                 velocity++;
             }
-            newGameArray = this.updateAlphaByte(newGameArray, velocity, i)
-            return newGameArray;
+
+            newChunkContent= this.updateAlphaByte(newChunkContent, velocity, i)
+            var allChunks= [newChunkContent, neighbourChunksContent]
+            return allChunks
         }
         return -1;
     }

@@ -30,7 +30,7 @@ function startPainting(drawingData, currentChunks, canvasData) {
     paint = true;
     orgX = getMousePositionX(canvasData, drawingData);
     orgY = getMousePositionY(canvasData, drawingData);
-    updateArray(orgX, orgY, currentChunks, drawingData);
+    updateChunk(orgX, orgY, currentChunks, drawingData);
     renderArray(canvasData, currentChunks);
 }
 
@@ -66,7 +66,7 @@ function drawLine(curX, curY, currentChunks, drawingData) {
     }
     var error = dx + dy;
     while (true) {
-        updateArray(orgX, orgY, currentChunks, drawingData);
+        updateChunk(orgX, orgY, currentChunks, drawingData);
         if (orgX == curX && orgY == curY) {
             break
         }
@@ -103,7 +103,7 @@ function eraseMode(eraseButton) {
 }
 
 //Procedure to update the currentChunks item to be true
-function updateArray(x, y, currentChunks, drawingData) {
+function updateChunk(x, y, currentChunks, drawingData) {
     var xChunk = Math.floor(x / currentChunks[0][0].size)
     var yChunk = Math.floor(y / currentChunks[0][0].size)
     var xInchunk = x - (xChunk * currentChunks[0][0].size)
@@ -111,6 +111,7 @@ function updateArray(x, y, currentChunks, drawingData) {
     var chunkCoord = [xChunk, yChunk]
     var index = chunkIndex(xInchunk, yInchunk, currentChunks[0][0].size)
     var theChunk = currentChunks[chunkCoord[0]][chunkCoord[1]]
+    theChunk.needUpdated = true;
     if (erase) {
         theChunk.content[index] = 0x00000000;
     }

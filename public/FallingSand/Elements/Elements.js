@@ -17,73 +17,77 @@ class Element{
     liquidState; //String
     resistivity; //Positive value
 
-    move(i, gameArray, canvasData, newGameArray, updatedPositions){
-        return newGameArray;
+    move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
+        var allChunks= [newChunkContent, newNeighbourChunksContent]
+        return allChunks
     }
-    swapPositions(newGameArray, updatedPositions, i0, i1){
-        var temp=newGameArray[i0];
-        newGameArray[i0]=newGameArray[i1];
-        newGameArray[i1]=temp;
+    swapPositions(newChunkContent, updatedPositions, i0, i1){
+        var temp=newChunkContent[i0];
+        newChunkContent[i0]=newChunkContent[i1];
+        newChunkContent[i1]=temp;
         updatedPositions.push(i1);
-        return newGameArray
+        return newChunkContent
     }
 
-    swapPositionsAcid(newGameArray, updatedPositions, i0, i1){
-        newGameArray[i0]=0x00000000;
-        newGameArray[i1]=0x00000000
+    swapPositionsBetweenChunk(oldChunkContent, neighbourChunkContent, updatedPositions, i0, i1){
+        var temp = oldChunkContent[i0];
+        oldChunkContent[i0]=neighbourChunkContent[i1];
+        neighbourChunkContent[i1]=temp
+        updatedPositions.push(i0);
+        return [oldChunkContent, neighbourChunkContent]
+    }
+
+    swapPositionsAcid(newChunkContent, updatedPositions, i0, i1){
+        newChunkContent[i0]=0x00000000;
+        newChunkContent[i1]=0x00000000
         updatedPositions.push(i1)
-        return newGameArray;
+        return newChunkContent;
     }
 
-    swapPositions2xAcid(newGameArray, updatedPositions, i0, i1){
-        var temp=newGameArray[i0];
-        newGameArray[i0]=0x00000000;
-        newGameArray[i1]=temp
+    swapPositions2xAcid(newChunkContent, updatedPositions, i0, i1){
+        var temp=newChunkContent[i0];
+        newChunkContent[i0]=0x00000000;
+        newChunkContent[i1]=temp
         updatedPositions.push(i1);
-        return newGameArray;
+        return newChunkContent;
     }
 
-    swapPositionsLiquid(newGameArray, updatedPositions, i0, i1){
-        var temp=newGameArray[i0];
-        newGameArray[i0]=newGameArray[i1];
-        newGameArray[i1]=temp;
+    swapPositionsLiquid(newChunkContent, updatedPositions, i0, i1){
+        var temp=newChunkContent[i0];
+        newChunkContent[i0]=newChunkContent[i1];
+        newChunkContent[i1]=temp;
         updatedPositions.push(i1);
         updatedPositions.push(i0);
-        return newGameArray
+        return newChunkContent
     }
 
-    swapPositionsPoison(newGameArray, updatedPositions, i0, i1){
-        newGameArray[i1]=newGameArray[i0];
+    swapPositionsPoison(newChunkContent, updatedPositions, i0, i1){
+        newChunkContent[i1]=newChunkContent[i0];
         updatedPositions.push(i1);
-        return newGameArray
+        return newChunkContent
     }
 
-    getNeighbourElement(gameArray, i){
-        var neighbourColour=gameArray[i]
+    getNeighbourElement(theChunkContent, i){
+        var neighbourColour=theChunkContent[i]
         neighbourColour&=0x00ffffff;
         var neighbourElement=getElement(neighbourColour);
         return neighbourElement;
     }
 
-    getAlpha(gameArray, i){
-        var velocity = gameArray[i];
+    getAlpha(theChunkContent, i){
+        var velocity = theChunkContent[i];
         velocity &= 0x0f000000;
         velocity=velocity  >> 24
         return velocity;
     }
 
-    updateAlphaByte(newGameArray, alphaByte, i){
+    updateAlphaByte(newChunkContent, alphaByte, i){
        
-        var colour=newGameArray[i];
-        if(newGameArray.includes(undefined)){
-            console.log("after alpha")
-        }
+        var colour=newChunkContent[i];
         colour&=0xf0ffffff;
         colour=colour | (alphaByte<<24);
-       
-        newGameArray[i]=colour;
-        
-        return newGameArray;
+        newChunkContent[i]=colour;
+        return newChunkContent;
     }
 
 }
