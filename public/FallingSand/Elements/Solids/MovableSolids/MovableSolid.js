@@ -7,14 +7,14 @@ class MovableSolid extends Solid {
 
     move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
 
-        var velocity = this.getAlpha(theChunkContent, i)
+        const velocity = this.getAlpha(theChunkContent, i)
         //console.log(velocity)
-        var moveDownPossible=this.moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, updatedPositions, velocity, chunkSize);
+        const moveDownPossible=this.moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, updatedPositions, velocity, chunkSize);
         if(!Number.isInteger(moveDownPossible)){
             return moveDownPossible;
         }
 
-        var dir = Math.random() < 0.5;
+        const dir = Math.random() < 0.5;
         /*
         if (dir) {
 
@@ -42,41 +42,33 @@ class MovableSolid extends Solid {
             }
         }
 */
-        var newChunkUpdateStatus = false
-        var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+        const newChunkUpdateStatus = false
+        const allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
         return allChunks
 
     }
 
     moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, updatedPositions, velocity, chunkSize) {
-        var belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
+        let belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
         if (this.density > belowElement.density) {
-            for (var j = 0; j < velocity; j++) {
-                var belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
+            for (let j = 0; j < velocity; j++) {
+                belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
                 if (this.density > belowElement.density && !(belowElement instanceof Solid) && updatedPositions.includes(i + chunkSize) == false && i + chunkSize < chunkSize *  chunkSize) {
                     newChunkContent= this.swapPositions(newChunkContent, updatedPositions, i, i +  chunkSize)
                     i = i +  chunkSize
                 }
                 else {
-                    var belowChunkContent = neighbourChunksContent[4]
-                    var newBelowChunkContent = newNeighbourChunksContent[4]
+                    const belowChunkContent = neighbourChunksContent[4]
+                    //var newBelowChunkContent = newNeighbourChunksContent[4]
                     if(belowChunkContent != -1){
                         belowElement=this.getNeighbourElement(belowChunkContent, i%chunkSize)
                         if(this.density > belowElement.density && !(belowElement instanceof Solid)){
-                            [newChunkContent, newBelowChunkContent]=this.swapPositionsBetweenChunk(newChunkContent, newBelowChunkContent, updatedPositions, i, i%chunkSize)
-                            neighbourChunksContent[4]=newBelowChunkContent
-                            var newChunkUpdateStatus = true
-                            var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+                            [newChunkContent, newNeighbourChunksContent[4]]=this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], updatedPositions, i, i%chunkSize)
+                            const newChunkUpdateStatus = true
+                            const allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
                             return allChunks
                         }
                     }
-                    /*
-                    velocity = 9 - velocity;
-                    
-                    newChunkContent.content = this.updateAlphaByte(newChunkContent.content, velocity, i);
-                    var allChunks= [newChunkContent, neighbourChunksContent]
-                    return allChunks
-                    */
                 }
             }
             if (velocity < this.terminalVelocity) {
@@ -84,8 +76,8 @@ class MovableSolid extends Solid {
             }
 
             newChunkContent= this.updateAlphaByte(newChunkContent, velocity, i)
-            var newChunkUpdateStatus = true
-            var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+            const newChunkUpdateStatus = true
+            const allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
             return allChunks
         }
         return -1;

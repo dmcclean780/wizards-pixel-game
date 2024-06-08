@@ -4,18 +4,20 @@ function step(currentChunks, canvasData, newChunks){
     newChunks=currentChunks.map(function(arr){
         return arr.slice();
     })
-    for(var i=0; i<currentChunks.length; i++){
-        for(var j=0; j<currentChunks[i].length; j++){
-            var theChunk = currentChunks[i][j]
-            var theChunkContent = theChunk.content
-            var newChunkContent = newChunks[i][j].content
+    const iLoopLength = currentChunks.length
+    const jLoopLength = currentChunks[0].length
+    for(let i=0; i<iLoopLength; i++){
+        for(let j=0; j<jLoopLength; j++){
+            const theChunk = currentChunks[i][j]
+            const theChunkContent = theChunk.content
+            let newChunkContent = newChunks[i][j].content
             const chunkSize = theChunk.size;
             if(theChunk.needUpdated == true){
-                var neighbourChunksContent = findNeighbourChunksContent(currentChunks, i, j)
-                var newNeighbourChunksContent =  findNeighbourChunksContent(newChunks, i, j)
-                var allChunks= executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
+                const neighbourChunksContent = findNeighbourChunksContent(currentChunks, i, j)
+                let newNeighbourChunksContent =  findNeighbourChunksContent(newChunks, i, j)
+                const allChunks= executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
                 newChunkContent=allChunks[0]
-                var newChunkUpdateStatus=allChunks[1]
+                const newChunkUpdateStatus=allChunks[1]
                 newNeighbourChunksContent=allChunks[2];
                 newChunks[i][j].needUpdated=newChunkUpdateStatus;
                 if(newChunkUpdateStatus){
@@ -30,8 +32,8 @@ function step(currentChunks, canvasData, newChunks){
 
 function findNeighbourChunksContent(currentChunks, x, y){
     let neighbourChunksContent=[]
-    for(var i=-1; i<2; i++){
-        for(var j=-1; j<2; j++){
+    for(let i=-1; i<2; i++){
+        for(let j=-1; j<2; j++){
             if(i==0 && j==0){
                 continue
             }
@@ -51,8 +53,8 @@ function findNeighbourChunksContent(currentChunks, x, y){
 
 function updateNeighbourChunks(newChunks, newNeighbourChunksContent, x, y){
     let k=0
-    for(var i=-1; i<2; i++){
-        for(var j=-1; j<2; j++){
+    for(let i=-1; i<2; i++){
+        for(let j=-1; j<2; j++){
             if(i==0 && j==0){
                 continue
             }
@@ -72,15 +74,17 @@ function updateNeighbourChunks(newChunks, newNeighbourChunksContent, x, y){
 }
 
 function executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize){
-    var updatedPositions=[];
-    var nextUpdateStatus = false;
-    for(var i=0; i<theChunkContent.length; i++){
-        var colour=theChunkContent[i];
+    let updatedPositions=[];
+    let nextUpdateStatus = false;
+    const chunkContentLength = theChunkContent.length
+    let allChunks
+    for(let i=0; i<chunkContentLength; i++){
+        let colour=theChunkContent[i];
         colour &= 0x00ffffff;
-        var element=getElement(colour);
+        let element=getElement(colour);
         
-       var allChunks=element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize);
-       var newChunkNeedUpdated= allChunks[1];
+       allChunks=element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize);
+       let newChunkNeedUpdated= allChunks[1];
        if(newChunkNeedUpdated == true){
         nextUpdateStatus =true;
        }
