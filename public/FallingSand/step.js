@@ -20,6 +20,7 @@ function step(currentChunks, canvasData, newChunks){
                 const newChunkUpdateStatus=allChunks[1]
                 newNeighbourChunksContent=allChunks[2];
                 newChunks[i][j].needUpdated=newChunkUpdateStatus;
+                currentChunks[i][j].needUpdated=newChunkUpdateStatus
                 if(newChunkUpdateStatus){
                     newChunks[i][j].content=newChunkContent;
                     newChunks=updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
@@ -82,12 +83,11 @@ function executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, 
         let colour=theChunkContent[i];
         colour &= 0x00ffffff;
         let element=getElement(colour);
-        
-       allChunks=element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize);
-       let newChunkNeedUpdated= allChunks[1];
-       if(newChunkNeedUpdated == true){
-        nextUpdateStatus =true;
-       }
+        allChunks=element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize);
+        let newChunkNeedUpdated= allChunks[1];
+        if(newChunkNeedUpdated == true){
+            nextUpdateStatus =true;
+        }
     }
     allChunks[1] = nextUpdateStatus;
     return allChunks

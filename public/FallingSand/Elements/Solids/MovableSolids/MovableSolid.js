@@ -10,6 +10,7 @@ class MovableSolid extends Solid {
         const velocity = this.getAlpha(theChunkContent, i)
         //console.log(velocity)
         const moveDownPossible=this.moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, updatedPositions, velocity, chunkSize);
+        //console.log(moveDownPossible)
         if(!Number.isInteger(moveDownPossible)){
             return moveDownPossible;
         }
@@ -42,8 +43,9 @@ class MovableSolid extends Solid {
             }
         }
 */
+        //console.log("hello")
         const newChunkUpdateStatus = false
-        const allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+        const allChunks= [newChunkContent, newChunkUpdateStatus, newNeighbourChunksContent]
         return allChunks
 
     }
@@ -63,11 +65,21 @@ class MovableSolid extends Solid {
                     if(belowChunkContent != -1){
                         belowElement=this.getNeighbourElement(belowChunkContent, i%chunkSize)
                         if(this.density > belowElement.density && !(belowElement instanceof Solid)){
-                            [newChunkContent, newNeighbourChunksContent[4]]=this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], updatedPositions, i, i%chunkSize)
+                            let allChunks=new Array(3)
+                            const returnedData=this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], updatedPositions, i, i%chunkSize)
+                            newNeighbourChunksContent[4]=returnedData[1]
                             const newChunkUpdateStatus = true
-                            const allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+                            allChunks[0]=returnedData[0]
+                            allChunks[1]= newChunkUpdateStatus
+                            allChunks[2]=newNeighbourChunksContent
                             return allChunks
                         }
+                        else{
+                            return -1
+                        }
+                    }
+                    else{
+                        return -1
                     }
                 }
             }
@@ -77,7 +89,7 @@ class MovableSolid extends Solid {
 
             newChunkContent= this.updateAlphaByte(newChunkContent, velocity, i)
             const newChunkUpdateStatus = true
-            const allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+            const allChunks= [newChunkContent, newChunkUpdateStatus, newNeighbourChunksContent]
             return allChunks
         }
         return -1;

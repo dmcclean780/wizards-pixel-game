@@ -19,7 +19,7 @@ class Element{
 
     move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
         var newChunkUpdateStatus = false
-        var allChunks= [newChunkContent, newChunkUpdateStatus, neighbourChunksContent]
+        var allChunks= [newChunkContent, newChunkUpdateStatus, newNeighbourChunksContent]
         return allChunks
     }
     swapPositions(newChunkContent, updatedPositions, i0, i1){
