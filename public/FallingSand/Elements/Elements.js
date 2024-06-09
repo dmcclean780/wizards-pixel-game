@@ -17,25 +17,34 @@ class Element{
     liquidState; //String
     resistivity; //Positive value
 
-    move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, updatedPositions, chunkSize){
+    move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, chunkSize){
         var newChunkUpdateStatus = false
-        var allChunks= [newChunkContent, newChunkUpdateStatus, newNeighbourChunksContent]
-        return allChunks
+        
+        let result = new Array(5)
+        result[0] = newChunkContent
+        result[1] = newChunkUpdateStatus
+        result[2] = newNeighbourChunksContent
+        result[3] = theChunkUpdatedPositions
+        result[4] = neighbourChunksUpdatedPositions
+
+        return result
     }
-    swapPositions(newChunkContent, updatedPositions, i0, i1){
+    swapPositions(newChunkContent, theChunkUpdatedPositions, i0, i1){
         var temp=newChunkContent[i0];
         newChunkContent[i0]=newChunkContent[i1];
         newChunkContent[i1]=temp;
-        updatedPositions.push(i1);
-        return newChunkContent
+        theChunkUpdatedPositions.push(i0);
+        theChunkUpdatedPositions.push(i1);
+        return [newChunkContent, theChunkUpdatedPositions]
     }
 
-    swapPositionsBetweenChunk(oldChunkContent, neighbourChunkContent, updatedPositions, i0, i1){
+    swapPositionsBetweenChunk(oldChunkContent, neighbourChunkContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, i0, i1){
         var temp = oldChunkContent[i0];
         oldChunkContent[i0]=neighbourChunkContent[i1];
         neighbourChunkContent[i1]=temp
-        updatedPositions.push(i0);
-        return [oldChunkContent, neighbourChunkContent]
+        theChunkUpdatedPositions.push(i0);
+        neighbourChunksUpdatedPositions.push(i1)
+        return [oldChunkContent, neighbourChunkContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions]
     }
 
     swapPositionsAcid(newChunkContent, updatedPositions, i0, i1){

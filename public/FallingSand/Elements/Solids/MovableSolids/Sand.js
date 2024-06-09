@@ -8,7 +8,7 @@ class Sand extends MovableSolid{
     acidStrength=0;
     poisonResistance=1;
     poisonStrength=0;
-    terminalVelocity=5;
+    terminalVelocity=16;
     inertialResistance=0.1;
     colour=0x8CE6F0;
     fireResistance=1000;
