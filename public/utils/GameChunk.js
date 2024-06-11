@@ -2,7 +2,6 @@ class GameChunk{
     worldPos;
     size=64;
     content;
-    updatedPositions=[]
     needUpdated;
 
     constructor(worldPos){

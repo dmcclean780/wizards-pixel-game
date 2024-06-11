@@ -73,7 +73,6 @@ window.addEventListener("load", (event)=>{
     var drawingData= getDrawingData(event, mouseEvent);
     sketch(drawingData, currentChunks, canvasData)
   } );
-
   //run();
 })
 
@@ -109,7 +108,8 @@ function setCanvasObj(){
 
 //Procedure to move the game on 1 generation
 function stepGame(){
-  var swap = step(currentChunks, canvasData, newChunks);
+  
+  var swap = step(currentChunks, newChunks, genNo);
   newChunks=currentChunks;
   currentChunks=swap;
   genNo++

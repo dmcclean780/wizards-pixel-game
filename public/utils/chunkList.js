@@ -15,15 +15,5 @@ function createChunks(canvasData){
     return chunkList
 }
 
-function getWorldPos(i, chunksPerRow, numberOfRows){
-    let xPos=i%chunksPerRow;
-    let yPos=0;
-    if(i>=chunksPerRow){
-        yPos = Math.floor(i/chunksPerRow)
-        numberOfRows++;
-    }
-    var worldPos={x:xPos, y:yPos}
-    return [worldPos, numberOfRows]
-}
 
 export {createChunks}

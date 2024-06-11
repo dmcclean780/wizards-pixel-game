@@ -1,61 +1,188 @@
 import { getElement } from "./ElementColourMap.js";
 
-function step(currentChunks, canvasData, newChunks) {
+function step(currentChunks, newChunks, genNo) {
+    for(let i=0; i<currentChunks.length; i++){
+        for(let j=0; j<currentChunks[i].length; j++){
+            newChunks[i][j]=currentChunks[i][j]
+        }
+    }
 
-    newChunks = currentChunks.map(function (arr) {
-        return arr.slice();
-    })
+    const currentPhase = genNo%4
+    //console.log(newChunks, currentChunks)
+    switch(currentPhase){
+        case 0:
+            newChunks=firstPhase(currentChunks, newChunks)
+            break
+        case 1:
+            newChunks=secondPhase(currentChunks, newChunks)
+            break
+        case 2:
+            newChunks=thirdPhase(currentChunks, newChunks)
+            break
+        case 3:
+            newChunks=fourthPhase(currentChunks, newChunks)
+            break
+    }
 
+   
+    return newChunks;
+}
+
+function firstPhase(currentChunks, newChunks){
+   
     const iLoopLength = currentChunks.length
     const jLoopLength = currentChunks[0].length
+    let k=0
 
-    for (let i = 0; i < iLoopLength; i++) {
-        for (let j = 0; j < jLoopLength; j++) {
+    for(let i=0; i<iLoopLength; i=i+2){
+        for(let j=0; j<jLoopLength; j=j+2){
+
+            k++
+            //console.log(k)
 
             const theChunk = currentChunks[i][j]
-            const theChunkContent = theChunk.content
-            let newChunkContent = newChunks[i][j].content
-            const chunkSize = theChunk.size;
+            if(theChunk.needUpdated){
+                const chunkSize=theChunk.size
 
-            if (theChunk.needUpdated == true) {
-
+                const theChunkContent = theChunk.content
                 const neighbourChunksContent = findNeighbourChunksContent(currentChunks, i, j)
+
+                let newChunkContent = newChunks[i][j].content
                 let newNeighbourChunksContent = findNeighbourChunksContent(newChunks, i, j)
-                let theChunkUpdatedPositions = theChunk.updatedPositions
-                //console.log(theChunkUpdatedPositions)
-                let neighbourChunksUpdatedPositions = findNeighbourChunksUpdatedPositions(currentChunks, i, j)
+               
+                const updatedChunkData=executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
 
-                const result = executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, chunkSize)
-
-                newChunkContent = result[0]
-                const newChunkUpdateStatus = result[1]
-                newNeighbourChunksContent = result[2];
-                theChunkUpdatedPositions = result[3];
-                neighbourChunksUpdatedPositions = result[4];
-
-                newChunks[i][j].needUpdated = newChunkUpdateStatus;
-                currentChunks[i][j].needUpdated = newChunkUpdateStatus
-
-                if (newChunkUpdateStatus) {
+                let newUpdateStatus=updatedChunkData[2]
+                newChunks[i][j].needUpdated=newUpdateStatus
+                
+                if(newUpdateStatus){
+                    newChunkContent=updatedChunkData[0]
+                    newNeighbourChunksContent=updatedChunkData[1]
                     newChunks[i][j].content = newChunkContent;
                     newChunks = updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
-
-                    currentChunks[i][j].updatedPositions = theChunkUpdatedPositions
-                    currentChunks = updateNeighbourChunksUpdatedPositions(currentChunks, neighbourChunksUpdatedPositions, i, j)
                 }
             }
         }
+
     }
-    for (let i = 0; i < iLoopLength; i++) {
-        for (let j = 0; j < jLoopLength; j++) {
-            currentChunks[i][j].updatedPositions=[]
-            newChunks[i][j].updatedPositions=[]
-            
+   
+    return newChunks
+}
+
+function secondPhase(currentChunks, newChunks){
+  
+    const iLoopLength = currentChunks.length
+    const jLoopLength = currentChunks[0].length
+
+
+    for(let i=1; i<iLoopLength; i=i+2){
+        for(let j=0; j<jLoopLength; j=j+2){
+            const theChunk = currentChunks[i][j]
+            if(theChunk.needUpdated){
+
+                const chunkSize=theChunk.size
+
+                const theChunkContent = theChunk.content
+                const neighbourChunksContent = findNeighbourChunksContent(currentChunks, i, j)
+
+                let newChunkContent = newChunks[i][j].content
+                let newNeighbourChunksContent = findNeighbourChunksContent(newChunks, i, j)
+               
+                const updatedChunkData=executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
+
+                let newUpdateStatus=updatedChunkData[2]
+                newChunks[i][j].needUpdated=newUpdateStatus
+                
+                if(newUpdateStatus){
+                    newChunkContent=updatedChunkData[0]
+                    newNeighbourChunksContent=updatedChunkData[1]
+                    newChunks[i][j].content = newChunkContent;
+                    newChunks = updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
+                }
+            }
         }
+
     }
+    
+    return newChunks
+}
+
+function thirdPhase(currentChunks, newChunks){
+   
+    const iLoopLength = currentChunks.length
+    const jLoopLength = currentChunks[0].length
 
 
-    return newChunks;
+    for(let i=0; i<iLoopLength; i=i+2){
+        for(let j=1; j<jLoopLength; j=j+2){
+            const theChunk = currentChunks[i][j]
+            if(theChunk.needUpdated){
+
+                const chunkSize=theChunk.size
+
+                const theChunkContent = theChunk.content
+                const neighbourChunksContent = findNeighbourChunksContent(currentChunks, i, j)
+
+                let newChunkContent = newChunks[i][j].content
+                let newNeighbourChunksContent = findNeighbourChunksContent(newChunks, i, j)
+               
+                const updatedChunkData=executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
+
+                let newUpdateStatus=updatedChunkData[2]
+                newChunks[i][j].needUpdated=newUpdateStatus
+              
+                if(newUpdateStatus){
+                    newChunkContent=updatedChunkData[0]
+                    newNeighbourChunksContent=updatedChunkData[1]
+                    newChunks[i][j].content = newChunkContent;
+                    newChunks = updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
+                }
+            }
+        }
+
+    }
+   
+    return newChunks
+}
+
+function fourthPhase(currentChunks, newChunks){
+   
+    const iLoopLength = currentChunks.length
+    const jLoopLength = currentChunks[0].length
+    let k=0
+
+    for(let i=1; i<iLoopLength; i=i+2){
+        for(let j=1; j<jLoopLength; j=j+2){
+            const theChunk = currentChunks[i][j]
+            k++
+            //console.log(k)
+            if(theChunk.needUpdated){
+
+                const chunkSize=theChunk.size
+
+                const theChunkContent = theChunk.content
+                const neighbourChunksContent = findNeighbourChunksContent(currentChunks, i, j)
+
+                let newChunkContent = newChunks[i][j].content
+                let newNeighbourChunksContent = findNeighbourChunksContent(newChunks, i, j)
+                
+                const updatedChunkData=executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize)
+
+                let newUpdateStatus=updatedChunkData[2]
+                newChunks[i][j].needUpdated=newUpdateStatus
+                
+                if(newUpdateStatus){
+                    newChunkContent=updatedChunkData[0]
+                    newNeighbourChunksContent=updatedChunkData[1]
+                    newChunks[i][j].content = newChunkContent;
+                    newChunks = updateNeighbourChunks(newChunks, newNeighbourChunksContent, i, j)
+                }
+            }
+        }
+
+    }
+    
+    return newChunks
 }
 
 function findNeighbourChunksContent(currentChunks, x, y) {
@@ -79,26 +206,6 @@ function findNeighbourChunksContent(currentChunks, x, y) {
     return neighbourChunksContent;
 }
 
-function findNeighbourChunksUpdatedPositions(currentChunks, x, y) {
-    let neighbourChunksUpdatedPositions = []
-    for (let i = -1; i < 2; i++) {
-        for (let j = -1; j < 2; j++) {
-            if (i == 0 && j == 0) {
-                continue
-            }
-            else {
-                if (x + i >= 0 && x + i < currentChunks.length && y + j >= 0 && y + j < currentChunks[x].length) {
-                    let neighbourChunkUpdatedPositions = currentChunks[x + i][y + j].updatedPositions
-                    neighbourChunksUpdatedPositions.push(neighbourChunkUpdatedPositions);
-                }
-                else {
-                    neighbourChunksUpdatedPositions.push(-1);
-                }
-            }
-        }
-    }
-    return neighbourChunksUpdatedPositions;
-}
 
 function updateNeighbourChunks(newChunks, newNeighbourChunksContent, x, y) {
     let k = 0
@@ -122,43 +229,24 @@ function updateNeighbourChunks(newChunks, newNeighbourChunksContent, x, y) {
     return newChunks
 }
 
-function updateNeighbourChunksUpdatedPositions(currentChunks, neighbourChunksUpdatedPositions, x, y) {
-    let k = 0
-    for (let i = -1; i < 2; i++) {
-        for (let j = -1; j < 2; j++) {
-            if (i == 0 && j == 0) {
-                continue
-            }
-            else {
-                if (x + i >= 0 && x + i < currentChunks.length && y + j >= 0 && y + j < currentChunks[x].length) {
-                    if (neighbourChunksUpdatedPositions[k] != -1) {
-                        currentChunks[x + i][y + j].updatedPositions = neighbourChunksUpdatedPositions[k]
-                    }
 
-                }
-            }
-            k++
-        }
-    }
-    return currentChunks
-}
-
-function executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, chunkSize) {
-    let updatedPositions = [];
-    let nextUpdateStatus = false;
+function executeChunk(theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize) {
+    let chunkUpdatedPositions = [];
+    let neighbourUpdatedPositions = [[],[],[],[],[],[],[],[]]
+    let newUpdateStatus=true;
     const chunkContentLength = theChunkContent.length
-    let result
+    let result;
     for (let i = 0; i < chunkContentLength; i++) {
         let colour = theChunkContent[i];
         colour &= 0x00ffffff;
         let element = getElement(colour);
-        result = element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, chunkSize);
-        let newChunkNeedUpdated = result[1];
-        if (newChunkNeedUpdated == true) {
-            nextUpdateStatus = true;
-        }
+        result = element.move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize, chunkUpdatedPositions, neighbourUpdatedPositions);
     }
-    result[1] = nextUpdateStatus;
+    var isEmpty = neighbourUpdatedPositions.every( function (a) { return !a.length });
+    if(chunkUpdatedPositions == [] && isEmpty){
+        newUpdateStatus=false
+    }
+    result.push(newUpdateStatus)
     return result
 }
 

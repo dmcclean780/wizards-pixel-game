@@ -17,15 +17,12 @@ class Element{
     liquidState; //String
     resistivity; //Positive value
 
-    move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, chunkSize){
+    move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize, chunkUpdatedPositions, neighbourUpdatedPositions){
         var newChunkUpdateStatus = false
-        
-        let result = new Array(5)
+
+        let result = new Array(2)
         result[0] = newChunkContent
-        result[1] = newChunkUpdateStatus
-        result[2] = newNeighbourChunksContent
-        result[3] = theChunkUpdatedPositions
-        result[4] = neighbourChunksUpdatedPositions
+        result[1] = newNeighbourChunksContent
 
         return result
     }
@@ -35,7 +32,7 @@ class Element{
         newChunkContent[i1]=temp;
         theChunkUpdatedPositions.push(i0);
         theChunkUpdatedPositions.push(i1);
-        return [newChunkContent, theChunkUpdatedPositions]
+        return newChunkContent
     }
 
     swapPositionsBetweenChunk(oldChunkContent, neighbourChunkContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, i0, i1){
@@ -44,7 +41,7 @@ class Element{
         neighbourChunkContent[i1]=temp
         theChunkUpdatedPositions.push(i0);
         neighbourChunksUpdatedPositions.push(i1)
-        return [oldChunkContent, neighbourChunkContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions]
+        return [oldChunkContent, neighbourChunkContent]
     }
 
     swapPositionsAcid(newChunkContent, updatedPositions, i0, i1){
