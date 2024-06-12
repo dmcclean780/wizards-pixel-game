@@ -8,8 +8,8 @@ class MovableSolid extends Solid {
     move(i, theChunkContent, neighbourChunksContent, newChunkContent, newNeighbourChunksContent, chunkSize, chunkUpdatedPositions, neighbourUpdatedPositions) {
 
         let velocity = this.getAlpha(theChunkContent, i)
-        if(velocity>31){
-            velocity=31
+        if (velocity > 31) {
+            velocity = 31
         }
         //console.log(velocity)
         const moveDownPossible = this.moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, velocity, chunkSize);
@@ -19,15 +19,16 @@ class MovableSolid extends Solid {
         }
 
         const dir = Math.random() < 0.5;
-        /*
+        
         if (dir) {
-
+/*
             var moveHorizontalRightPossible=this.moveHorizontalRight(i, canvasData, newGameArray, updatedPositions, velocity)
             if(!Number.isInteger(moveHorizontalRightPossible)){
                 return moveHorizontalRightPossible
             }
+        */
 
-            var moveDownDiagonalRightPossible=this.moveDownDiagonalRight(i, gameArray, canvasData, newGameArray, updatedPositions)
+            const moveDownDiagonalRightPossible=this.moveDownDiagonalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize)
             if(!Number.isInteger(moveDownDiagonalRightPossible)){
                 return moveDownDiagonalRightPossible
             }
@@ -35,17 +36,19 @@ class MovableSolid extends Solid {
         }
 
         if(!dir){
+        /*
             var moveHorizontalLeftPossible=this.moveHorizontalLeft(i, canvasData, newGameArray, updatedPositions, velocity)
             if(!Number.isInteger(moveHorizontalLeftPossible)){
                 return moveHorizontalLeftPossible
             }
-    
-            var moveDownDiagonalLeftPossible=this.moveDownDiagonalLeft(i, gameArray, canvasData, newGameArray, updatedPositions)
+    */
+            const moveDownDiagonalLeftPossible=this.moveDownDiagonalLeft(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize)
             if(!Number.isInteger(moveDownDiagonalLeftPossible)){
                 return moveDownDiagonalLeftPossible
             }
+            
         }
-*/
+
         //console.log("hello")
 
         let result = new Array(2)
@@ -57,42 +60,37 @@ class MovableSolid extends Solid {
     }
 
     moveDown(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, velocity, chunkSize) {
-        let crossedBorder=false
+        let crossedBorder = false
         let belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
         if (this.density > belowElement.density) {
             for (var j = 0; j < velocity; j++) {
                 belowElement = this.getNeighbourElement(theChunkContent, i + chunkSize)
-                if (this.density > belowElement.density && !(belowElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize) == false && i + chunkSize < chunkSize * chunkSize && crossedBorder==false ) {
-                    newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + chunkSize) 
+                if (this.density > belowElement.density && !(belowElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize) == false && i + chunkSize < chunkSize * chunkSize && crossedBorder == false) {
+                    newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + chunkSize)
                     i = i + chunkSize
                 }
                 else {
-                    if(i + chunkSize >= chunkSize * chunkSize || crossedBorder == true){
-                        const belowChunkContent = neighbourChunksContent[4]
-                        let destinationIndex;
-                        if (belowChunkContent != -1) {
-                            
-                            if(crossedBorder == false){
-                                destinationIndex=i%chunkSize
-                                belowElement = this.getNeighbourElement(belowChunkContent, destinationIndex)
-                                if (this.density > belowElement.density && !(belowElement instanceof Solid) && neighbourUpdatedPositions[4].includes(destinationIndex) == false) {
-                                    const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], chunkUpdatedPositions, neighbourUpdatedPositions[4], i, destinationIndex)
+                    const belowChunkContent = neighbourChunksContent[4]
+                    if (belowChunkContent != -1) {
+                        if (i + chunkSize >= chunkSize * chunkSize) {
+                            let destinationIndex = i % chunkSize
+                            belowElement = this.getNeighbourElement(belowChunkContent, destinationIndex)
+                            if (this.density > belowElement.density && !(belowElement instanceof Solid) && neighbourUpdatedPositions[4].includes(destinationIndex) == false) {
+                                const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], chunkUpdatedPositions, neighbourUpdatedPositions[4], i, destinationIndex)
 
-                                    newChunkContent = returnedData[0]
-                                    newNeighbourChunksContent[4] = returnedData[1]
+                                newChunkContent = returnedData[0]
+                                newNeighbourChunksContent[4] = returnedData[1]
 
-                                    i=i%chunkSize
-                                    crossedBorder=true
-                                }
+                                i = i % chunkSize
+                                crossedBorder = true
                             }
-                            else{
-                                destinationIndex=i + chunkSize
-                                belowElement = this.getNeighbourElement(belowChunkContent, destinationIndex)
-                                if (this.density > belowElement.density && !(belowElement instanceof Solid) && neighbourUpdatedPositions[4].includes(destinationIndex) == false){
-                                    newNeighbourChunksContent[4] = this.swapPositions(newNeighbourChunksContent[4], neighbourUpdatedPositions[4], i, i + chunkSize)
-                                    
-                                    i=i+chunkSize
-                                }
+                        }
+                        if (crossedBorder == true) {
+                            let destinationIndex = i + chunkSize
+                            belowElement = this.getNeighbourElement(belowChunkContent, destinationIndex)
+                            if (this.density > belowElement.density && !(belowElement instanceof Solid) && neighbourUpdatedPositions[4].includes(destinationIndex) == false) {
+                                newNeighbourChunksContent[4] = this.swapPositions(newNeighbourChunksContent[4], neighbourUpdatedPositions[4], i, i + chunkSize)
+                                i = i + chunkSize
                             }
                         }
                     }
@@ -108,41 +106,180 @@ class MovableSolid extends Solid {
             result[0] = newChunkContent
             result[1] = newNeighbourChunksContent
 
-            if((newChunkContent instanceof Array)){
-                //console.log(newChunkContent)
-            }
-            
             return result
         }
         return -1;
     }
 
-    moveDownDiagonalLeft(i, gameArray, canvasData, newGameArray, updatedPositions) {
-        if (i + canvasData.width - 1 < canvasData.width * canvasData.height && updatedPositions.indexOf(i + canvasData.width - 1) == -1 && i % canvasData.width != 0) {
-            var adjacentElement = this.getNeighbourElement(gameArray, i - 1);
+    moveDownDiagonalLeft(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize) {
+
+        if (i % chunkSize == 0 && neighbourChunksContent[1] != -1) {
+            const adjacentChunkContent = neighbourChunksContent[1]
+            const adjacentIndex = i+chunkSize-1
+            const adjacentElement = this.getNeighbourElement(adjacentChunkContent, adjacentIndex)
             if (this.density > adjacentElement.density) {
-                var destinationElement = this.getNeighbourElement(gameArray, i + canvasData.width - 1);
-                if (this.density > destinationElement.density && destinationElement instanceof Liquid || destinationElement instanceof Empty) {
-                    newGameArray = this.swapPositions(newGameArray, updatedPositions, i, i + canvasData.width - 1)
-                    return newGameArray;
+                if (i == chunkSize * (chunkSize - 1) && neighbourChunksContent[2] != -1) {
+                    const destinationChunkContent = neighbourChunksContent[2]
+                    const destinationElement = this.getNeighbourElement(destinationChunkContent, chunkSize - 1)
+                    if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[2].includes(chunkSize - 1) == false) {
+                        const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[2], chunkUpdatedPositions, neighbourUpdatedPositions[7], i, chunkSize - 1)
+
+
+                        newChunkContent = returnedData[0]
+                        newNeighbourChunksContent[2] = returnedData[1]
+
+                        let result = new Array(2)
+                        result[0] = newChunkContent
+                        result[1] = newNeighbourChunksContent
+                        return result
+                    }
+
+                }
+                else {
+                    const destinationChunkContent = neighbourChunksContent[1]
+                    const destinationElement = this.getNeighbourElement(destinationChunkContent, adjacentIndex + chunkSize)
+                    if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[1].includes(adjacentIndex + chunkSize) == false) {
+                        const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[1], chunkUpdatedPositions, neighbourUpdatedPositions[1], i, adjacentIndex + chunkSize)
+
+
+                        newChunkContent = returnedData[0]
+                        newNeighbourChunksContent[1] = returnedData[1]
+
+                        let result = new Array(2)
+
+                        result[0] = newChunkContent
+                        result[1] = newNeighbourChunksContent
+                        return result
+                    }
                 }
             }
         }
-        return -1;
+        let adjacentElement = this.getNeighbourElement(theChunkContent, i - 1)
+        if (this.density > adjacentElement.density) {
+            if (i + chunkSize - 1 > chunkSize * chunkSize && neighbourChunksContent[4]!= -1) {
+                const destinationChunkContent = neighbourChunksContent[4]
+                const destinationElement = this.getNeighbourElement(destinationChunkContent, i % chunkSize - 1)
+                if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[4].includes(i % chunkSize - 1) == false) {
+                    const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], chunkUpdatedPositions, neighbourUpdatedPositions[4], i, i % chunkSize - 1)
+
+
+                    newChunkContent = returnedData[0]
+                    newNeighbourChunksContent[4] = returnedData[1]
+
+                    let result = new Array(2)
+
+                    result[0] = newChunkContent
+                    result[1] = newNeighbourChunksContent
+                    return result
+                }
+            }
+            const destinationElement = this.getNeighbourElement(theChunkContent, i + chunkSize - 1)
+            if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize - 1) == false) {
+                newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + chunkSize - 1)
+                let result = new Array(2)
+                result[0] = newChunkContent
+                result[1] = newNeighbourChunksContent
+                return result
+            }
+        }
+
+        return -1
     }
 
-    moveDownDiagonalRight(i, gameArray, canvasData, newGameArray, updatedPositions) {
-        if (i + canvasData.width + 1 < canvasData.width * canvasData.height && updatedPositions.indexOf(i + canvasData.width + 1) == -1 && i % canvasData.width != canvasData.width - 1) {
-            var adjacentElement = this.getNeighbourElement(gameArray, i + 1);
-            if (this.density > adjacentElement.density) {
-                var destinationElement = this.getNeighbourElement(gameArray, i + canvasData.width + 1);
-                if (this.density > destinationElement.density && destinationElement instanceof Liquid || destinationElement instanceof Empty) {
-                    newGameArray = this.swapPositions(newGameArray, updatedPositions, i, i + canvasData.width + 1)
-                    return newGameArray;
+
+
+
+    moveDownDiagonalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize) {
+
+        if (i % chunkSize == chunkSize-1 && neighbourChunksContent[6] != -1) {
+            const adjacentChunkContent = neighbourChunksContent[6]
+            const adjacentIndex = i-chunkSize+1
+            const adjacentElement = this.getNeighbourElement(adjacentChunkContent, adjacentIndex)
+
+            if (this.density > adjacentElement.density ) {
+
+                if (i == (chunkSize * chunkSize)-1 && neighbourChunksContent[7] != -1) {
+
+                    const destinationChunkContent = neighbourChunksContent[7]
+                    const destinationElement = this.getNeighbourElement(destinationChunkContent, 0)
+
+                    if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[7].includes(0) == false) {
+
+                        const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[5], chunkUpdatedPositions, neighbourUpdatedPositions[7], i, 0)
+
+                        newChunkContent = returnedData[0]
+                        newNeighbourChunksContent[7] = returnedData[1]
+
+                        let result = new Array(2)
+                        result[0] = newChunkContent
+                        result[1] = newNeighbourChunksContent
+
+                        return result
+                    }
+
+                }
+
+                else {
+
+                    const destinationChunkContent = neighbourChunksContent[6]
+                    const destinationElement = this.getNeighbourElement(destinationChunkContent, adjacentIndex + chunkSize)
+
+                    if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[6].includes(adjacentIndex + chunkSize) == false) {
+
+                        const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[6], chunkUpdatedPositions, neighbourUpdatedPositions[6], i, adjacentIndex + chunkSize)
+
+                        newChunkContent = returnedData[0]
+                        newNeighbourChunksContent[6] = returnedData[1]
+
+                        let result = new Array(2)
+                        result[0] = newChunkContent
+                        result[1] = newNeighbourChunksContent
+
+                        return result
+                    }
                 }
             }
         }
-        return -1;
+
+        let adjacentElement = this.getNeighbourElement(theChunkContent, i + 1)
+
+        if (this.density > adjacentElement.density) {
+
+            if (i + chunkSize - 1 > chunkSize * chunkSize && neighbourChunksContent[4] != -1) {
+
+                const destinationChunkContent = neighbourChunksContent[4]
+                const destinationElement = this.getNeighbourElement(destinationChunkContent, i % chunkSize + 1)
+
+                if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[4].includes(i % chunkSize + 1) == false) {
+
+                    const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], chunkUpdatedPositions, neighbourUpdatedPositions[4], i, i % chunkSize + 1)
+
+                    newChunkContent = returnedData[0]
+                    newNeighbourChunksContent[4] = returnedData[1]
+
+                    let result = new Array(2)
+                    result[0] = newChunkContent
+                    result[1] = newNeighbourChunksContent
+
+                    return result
+                }
+            }
+
+            const destinationElement = this.getNeighbourElement(theChunkContent, i + chunkSize + 1)
+
+            if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize + 1) == false) {
+
+                newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + chunkSize + 1)
+
+                let result = new Array(2)
+                result[0] = newChunkContent
+                result[1] = newNeighbourChunksContent
+
+                return result
+            }
+        }
+
+        return -1
     }
 
     moveHorizontalLeft(i, canvasData, newGameArray, updatedPositions, velocity) {
