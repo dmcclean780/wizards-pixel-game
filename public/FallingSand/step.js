@@ -32,7 +32,7 @@ function firstPhase(currentChunks, newChunks) {
 
     const iLoopLength = currentChunks.length
     const jLoopLength = currentChunks[0].length
-    let k = 0
+    //let k = 0
 
     for (let i = 0; i < iLoopLength; i = i + 2) {
         for (let j = 0; j < jLoopLength; j = j + 2) {
@@ -41,8 +41,8 @@ function firstPhase(currentChunks, newChunks) {
 
             const theChunk = currentChunks[i][j]
             if (theChunk.needUpdated) {
-                k++
-                console.log(k)
+                //k++
+                //console.log(k)
                 const chunkSize = theChunk.size
 
                 const theChunkContent = theChunk.content
