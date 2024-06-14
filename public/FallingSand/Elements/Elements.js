@@ -12,7 +12,7 @@ class Element{
     colour; //Hex number or array of hex numbers
     fireResistance; //value between 0 and 1000
     flammable; //Boolean value
-    dispertionRate; //Positive Integer value 
+    dispertionRate; //Positive Integer value les than 32 
     gasState; // String
     liquidState; //String
     resistivity; //Positive value
@@ -26,6 +26,7 @@ class Element{
 
         return result
     }
+
     swapPositions(newChunkContent, theChunkUpdatedPositions, i0, i1){
         var temp=newChunkContent[i0];
         newChunkContent[i0]=newChunkContent[i1];
@@ -59,14 +60,6 @@ class Element{
         return newChunkContent;
     }
 
-    swapPositionsLiquid(newChunkContent, updatedPositions, i0, i1){
-        var temp=newChunkContent[i0];
-        newChunkContent[i0]=newChunkContent[i1];
-        newChunkContent[i1]=temp;
-        updatedPositions.push(i1);
-        updatedPositions.push(i0);
-        return newChunkContent
-    }
 
     swapPositionsPoison(newChunkContent, updatedPositions, i0, i1){
         newChunkContent[i1]=newChunkContent[i0];
@@ -96,6 +89,8 @@ class Element{
         newChunkContent[i]=colour;
         return newChunkContent;
     }
+
+    
 
 }
 

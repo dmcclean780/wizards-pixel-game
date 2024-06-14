@@ -18,35 +18,35 @@ class MovableSolid extends Solid {
             return moveDownPossible;
         }
 
-        const dir = Math.random() < 0.5;
-        
+        const dir = Math.random() > 0.5;
+
         if (dir) {
-/*
-            var moveHorizontalRightPossible=this.moveHorizontalRight(i, canvasData, newGameArray, updatedPositions, velocity)
-            if(!Number.isInteger(moveHorizontalRightPossible)){
+
+            const moveHorizontalRightPossible = this.moveHorizontalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, velocity, chunkSize)
+            if (!Number.isInteger(moveHorizontalRightPossible)) {
                 return moveHorizontalRightPossible
             }
-        */
 
-            const moveDownDiagonalRightPossible=this.moveDownDiagonalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize)
-            if(!Number.isInteger(moveDownDiagonalRightPossible)){
+
+            const moveDownDiagonalRightPossible = this.moveDownDiagonalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize)
+            if (!Number.isInteger(moveDownDiagonalRightPossible)) {
                 return moveDownDiagonalRightPossible
             }
-    
+
         }
 
-        if(!dir){
-        /*
-            var moveHorizontalLeftPossible=this.moveHorizontalLeft(i, canvasData, newGameArray, updatedPositions, velocity)
-            if(!Number.isInteger(moveHorizontalLeftPossible)){
+        else {
+
+            const moveHorizontalLeftPossible = this.moveHorizontalLeft(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, velocity, chunkSize)
+            if (!Number.isInteger(moveHorizontalLeftPossible)) {
                 return moveHorizontalLeftPossible
             }
-    */
-            const moveDownDiagonalLeftPossible=this.moveDownDiagonalLeft(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize)
-            if(!Number.isInteger(moveDownDiagonalLeftPossible)){
+
+            const moveDownDiagonalLeftPossible = this.moveDownDiagonalLeft(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize)
+            if (!Number.isInteger(moveDownDiagonalLeftPossible)) {
                 return moveDownDiagonalLeftPossible
             }
-            
+
         }
 
         //console.log("hello")
@@ -93,6 +93,17 @@ class MovableSolid extends Solid {
                                 i = i + chunkSize
                             }
                         }
+                        else {
+                            velocity = 9 - velocity
+                            newChunkContent = this.updateAlphaByte(newChunkContent, velocity, i)
+
+                            let result = new Array(2)
+                            result[0] = newChunkContent
+                            result[1] = newNeighbourChunksContent
+
+                            return result
+
+                        }
                     }
                 }
             }
@@ -115,7 +126,7 @@ class MovableSolid extends Solid {
 
         if (i % chunkSize == 0 && neighbourChunksContent[1] != -1) {
             const adjacentChunkContent = neighbourChunksContent[1]
-            const adjacentIndex = i+chunkSize-1
+            const adjacentIndex = i + chunkSize - 1
             const adjacentElement = this.getNeighbourElement(adjacentChunkContent, adjacentIndex)
             if (this.density > adjacentElement.density) {
                 if (i == chunkSize * (chunkSize - 1) && neighbourChunksContent[2] != -1) {
@@ -156,21 +167,21 @@ class MovableSolid extends Solid {
                 }
             }
         }
-        else{
+        else {
             let adjacentElement = this.getNeighbourElement(theChunkContent, i - 1)
             if (this.density > adjacentElement.density) {
-                if (i + chunkSize - 1 > chunkSize * chunkSize && neighbourChunksContent[4]!= -1) {
+                if (i + chunkSize - 1 > chunkSize * chunkSize && neighbourChunksContent[4] != -1) {
                     const destinationChunkContent = neighbourChunksContent[4]
                     const destinationElement = this.getNeighbourElement(destinationChunkContent, i % chunkSize - 1)
                     if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[4].includes(i % chunkSize - 1) == false) {
                         const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], chunkUpdatedPositions, neighbourUpdatedPositions[4], i, i % chunkSize - 1)
-    
-    
+
+
                         newChunkContent = returnedData[0]
                         newNeighbourChunksContent[4] = returnedData[1]
-    
+
                         let result = new Array(2)
-    
+
                         result[0] = newChunkContent
                         result[1] = newNeighbourChunksContent
                         return result
@@ -178,7 +189,7 @@ class MovableSolid extends Solid {
                     return -1
                 }
                 const destinationElement = this.getNeighbourElement(theChunkContent, i + chunkSize - 1)
-                if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize - 1) == false) {
+                if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize - 1) == false && i % chunkSize != 0) {
                     newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + chunkSize - 1)
                     let result = new Array(2)
                     result[0] = newChunkContent
@@ -187,7 +198,7 @@ class MovableSolid extends Solid {
                 }
             }
         }
-        
+
 
         return -1
     }
@@ -197,14 +208,14 @@ class MovableSolid extends Solid {
 
     moveDownDiagonalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, chunkSize) {
 
-        if (i % chunkSize == chunkSize-1 && neighbourChunksContent[6] != -1) {
+        if (i % chunkSize == chunkSize - 1 && neighbourChunksContent[6] != -1) {
             const adjacentChunkContent = neighbourChunksContent[6]
-            const adjacentIndex = i-chunkSize+1
+            const adjacentIndex = i - chunkSize + 1
             const adjacentElement = this.getNeighbourElement(adjacentChunkContent, adjacentIndex)
 
-            if (this.density > adjacentElement.density ) {
+            if (this.density > adjacentElement.density) {
 
-                if (i == (chunkSize * chunkSize)-1 && neighbourChunksContent[7] != -1) {
+                if (i == (chunkSize * chunkSize) - 1 && neighbourChunksContent[7] != -1) {
 
                     const destinationChunkContent = neighbourChunksContent[7]
                     const destinationElement = this.getNeighbourElement(destinationChunkContent, 0)
@@ -248,42 +259,42 @@ class MovableSolid extends Solid {
                 }
             }
         }
-        else{
+        else {
             let adjacentElement = this.getNeighbourElement(theChunkContent, i + 1)
 
             if (this.density > adjacentElement.density) {
-    
+
                 if (i + chunkSize - 1 > chunkSize * chunkSize && neighbourChunksContent[4] != -1) {
-    
+
                     const destinationChunkContent = neighbourChunksContent[4]
                     const destinationElement = this.getNeighbourElement(destinationChunkContent, i % chunkSize + 1)
-    
+
                     if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && neighbourUpdatedPositions[4].includes(i % chunkSize + 1) == false) {
-    
+
                         const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[4], chunkUpdatedPositions, neighbourUpdatedPositions[4], i, i % chunkSize + 1)
-    
+
                         newChunkContent = returnedData[0]
                         newNeighbourChunksContent[4] = returnedData[1]
-    
+
                         let result = new Array(2)
                         result[0] = newChunkContent
                         result[1] = newNeighbourChunksContent
-    
+
                         return result
                     }
                     return -1
                 }
-    
+
                 const destinationElement = this.getNeighbourElement(theChunkContent, i + chunkSize + 1)
-    
-                if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize + 1) == false) {
-    
+
+                if (this.density > destinationElement.density && !(destinationElement instanceof Solid) && chunkUpdatedPositions.includes(i + chunkSize + 1) == false && i % chunkSize != chunkSize - 1) {
+
                     newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + chunkSize + 1)
-    
+
                     let result = new Array(2)
                     result[0] = newChunkContent
                     result[1] = newNeighbourChunksContent
-    
+
                     return result
                 }
             }
@@ -291,60 +302,134 @@ class MovableSolid extends Solid {
         return -1
     }
 
-    moveHorizontalLeft(i, canvasData, newGameArray, updatedPositions, velocity) {
+    moveHorizontalLeft(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, velocity, chunkSize) {
+
+        let crossedBorder = false
         if (velocity > 0) {
             for (var j = 0; j < velocity; j++) {
-                var adjacentElement = this.getNeighbourElement(newGameArray, i - 1);
-                if (this.density > adjacentElement.density && updatedPositions.includes(i - 1) == false && i % canvasData.width != 0) {
-                    newGameArray = this.swapPositions(newGameArray, updatedPositions, i, i - 1)
+                let adjacentElement = this.getNeighbourElement(theChunkContent, i - 1)
+                if (this.density > adjacentElement.density && !(adjacentElement instanceof Solid) && chunkUpdatedPositions.includes(i - 1) == false && i % chunkSize != 0 && crossedBorder == false) {
+                    newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i - 1)
                     i = i - 1
                 }
                 else {
-                    var FrictionChance = Math.random()
-                    if (FrictionChance > 1 - this.inertialResistance) {
-                        velocity--
+                    const adjacentChunkContentChunkContent = neighbourChunksContent[1]
+                    if (adjacentChunkContentChunkContent != -1) {
+                        if (i % chunkSize == 0 && crossedBorder == true) {
+                            let destinationIndex = i + chunkSize - 1
+                            adjacentElement = this.getNeighbourElement(adjacentChunkContentChunkContent, destinationIndex)
+                            if (this.density > adjacentElement.density && !(adjacentElement instanceof Solid) && neighbourUpdatedPositions[1].includes(destinationIndex) == false) {
+                                const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[1], chunkUpdatedPositions, neighbourUpdatedPositions[1], i, destinationIndex)
+
+                                newChunkContent = returnedData[0]
+                                newNeighbourChunksContent[1] = returnedData[1]
+
+                                i = i + chunkSize - 1
+                                crossedBorder = true
+                            }
+                        }
+                        if (crossedBorder == true) {
+                            let destinationIndex = i - 1
+                            adjacentElement = this.getNeighbourElement(adjacentChunkContentChunkContent, destinationIndex)
+                            if (this.density > adjacentElement.density && !(adjacentElement instanceof Solid) && neighbourUpdatedPositions[1].includes(destinationIndex) == false && i % chunkSize != 0) {
+                                newNeighbourChunksContent[1] = this.swapPositions(newNeighbourChunksContent[1], neighbourUpdatedPositions[1], i, i - 1)
+                                i = i - 1
+                            }
+                        }
+                        else {
+                            var FrictionChance = Math.random()
+                            if (FrictionChance > 1 - this.inertialResistance) {
+                                velocity--
+                            }
+                            newChunkContent = this.updateAlphaByte(newChunkContent, velocity, i)
+                            let result = new Array(2)
+                            result[0] = newChunkContent
+                            result[1] = newNeighbourChunksContent
+
+                            return result
+
+                        }
                     }
-                    newGameArray = this.updateAlphaByte(newGameArray, velocity, i)
-                    return newGameArray
                 }
             }
             var FrictionChance = Math.random()
             if (FrictionChance > 1 - this.inertialResistance) {
                 velocity--
             }
-            newGameArray = this.updateAlphaByte(newGameArray, velocity, i)
-            return newGameArray;
+            newChunkContent = this.updateAlphaByte(newChunkContent, velocity, i)
+            let result = new Array(2)
+            result[0] = newChunkContent
+            result[1] = newNeighbourChunksContent
 
+            return result
         }
         return -1;
     }
 
-    moveHorizontalRight(i, canvasData, newGameArray, updatedPositions, velocity) {
+    moveHorizontalRight(i, theChunkContent, newChunkContent, neighbourChunksContent, newNeighbourChunksContent, chunkUpdatedPositions, neighbourUpdatedPositions, velocity, chunkSize) {
+
+        let crossedBorder = false
         if (velocity > 0) {
             for (var j = 0; j < velocity; j++) {
-                var adjacentElement = this.getNeighbourElement(newGameArray, i + 1);
-                if (this.density > adjacentElement.density && updatedPositions.includes(i + 1) == false && i % canvasData.width != 0) {
-                    newGameArray = this.swapPositions(newGameArray, updatedPositions, i, i + 1)
+                let adjacentElement = this.getNeighbourElement(theChunkContent, i + 1)
+                if (this.density > adjacentElement.density && !(adjacentElement instanceof Solid) && chunkUpdatedPositions.includes(i + 1) == false && i % chunkSize != chunkSize -1 && crossedBorder == false) {
+                    newChunkContent = this.swapPositions(newChunkContent, chunkUpdatedPositions, i, i + 1)
                     i = i + 1
                 }
                 else {
-                    var FrictionChance = Math.random();
-                    if (FrictionChance > 1 - this.inertialResistance) {
-                        velocity--
+                    const adjacentChunkContentChunkContent = neighbourChunksContent[6]
+                    if (adjacentChunkContentChunkContent != -1) {
+                        if (i % chunkSize == chunkSize - 1) {
+                            let destinationIndex = i - chunkSize + 1
+                            adjacentElement = this.getNeighbourElement(adjacentChunkContentChunkContent, destinationIndex)
+                            if (this.density > adjacentElement.density && !(adjacentElement instanceof Solid) && neighbourUpdatedPositions[6].includes(destinationIndex) == false) {
+                                const returnedData = this.swapPositionsBetweenChunk(newChunkContent, newNeighbourChunksContent[6], chunkUpdatedPositions, neighbourUpdatedPositions[6], i, destinationIndex)
+
+                                newChunkContent = returnedData[0]
+                                newNeighbourChunksContent[6] = returnedData[1]
+
+                                i = i - chunkSize + 1
+                                crossedBorder = true
+                            }
+                        }
+                        if (crossedBorder == true) {
+                            let destinationIndex = i + 1
+                            adjacentElement = this.getNeighbourElement(adjacentChunkContentChunkContent, destinationIndex)
+                            if (this.density > adjacentElement.density && !(adjacentElement instanceof Solid) && neighbourUpdatedPositions[6].includes(destinationIndex) == false ) {
+                                newNeighbourChunksContent[6] = this.swapPositions(newNeighbourChunksContent[6], neighbourUpdatedPositions[6], i, i + 1)
+                                i = i + 1
+                            }
+                        }
+                        else {
+                            var FrictionChance = Math.random()
+                            if (FrictionChance > 1 - this.inertialResistance) {
+                                velocity--
+                            }
+                            newChunkContent = this.updateAlphaByte(newChunkContent, velocity, i)
+                            let result = new Array(2)
+                            result[0] = newChunkContent
+                            result[1] = newNeighbourChunksContent
+
+                            return result
+
+                        }
                     }
-                    newGameArray = this.updateAlphaByte(newGameArray, velocity, i)
-                    return newGameArray
                 }
             }
             var FrictionChance = Math.random()
             if (FrictionChance > 1 - this.inertialResistance) {
                 velocity--
             }
-            newGameArray = this.updateAlphaByte(newGameArray, velocity, i)
-            return newGameArray
+            newChunkContent = this.updateAlphaByte(newChunkContent, velocity, i)
+            let result = new Array(2)
+            result[0] = newChunkContent
+            result[1] = newNeighbourChunksContent
+
+            return result
         }
-        return -1
+        return -1;
     }
+
 }
 
 export { MovableSolid }

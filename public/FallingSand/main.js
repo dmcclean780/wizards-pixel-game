@@ -28,7 +28,7 @@ var sum=0;
 //Block of code to create the array and listen for a mouse click
 window.addEventListener("load", (event)=>{
   var audioElement = document.getElementById("MainMusic");
-  audioElement.play();
+  //audioElement.play();
   
   setCanvasObj();
   currentChunks=createChunks(canvasData);

@@ -16,7 +16,7 @@ class Water extends Liquid{
     colour=0xFF901E;
     fireResistance=1000;
     flammable=false;
-    dispertionRate=50;
+    dispertionRate=30;
     gasState= "steam";
     liquidState="";
     resistivity=1;
