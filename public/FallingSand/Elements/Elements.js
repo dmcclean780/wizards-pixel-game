@@ -12,7 +12,7 @@ class Element{
     colour; //Hex number or array of hex numbers
     fireResistance; //value between 0 and 1000
     flammable; //Boolean value
-    dispertionRate; //Positive Integer value les than 32 
+    dispertionRate; //Positive Integer value less than 32 
     gasState; // String
     liquidState; //String
     resistivity; //Positive value
