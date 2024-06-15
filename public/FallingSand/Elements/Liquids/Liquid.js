@@ -99,7 +99,8 @@ class Liquid extends Element {
                                 newNeighbourChunksContent[4] = this.swapPositions(newNeighbourChunksContent[4], neighbourUpdatedPositions[4], i, destinationIndex);
                                 i += chunkSize;
                             }
-                        } else {
+                        } 
+                        else {
                             velocity = 9 - velocity;
                             newChunkContent = this.updateAlphaByte(newChunkContent, velocity, i);
                             return [newChunkContent, newNeighbourChunksContent];

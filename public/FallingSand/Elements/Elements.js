@@ -52,6 +52,14 @@ class Element{
         return newChunkContent;
     }
 
+    swapPositionsAcidBetweenChunks(oldChunkContent, neighbourChunkContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, i0, i1){
+        oldChunkContent[i0]=0;
+        neighbourChunkContent[i1]=0
+        theChunkUpdatedPositions.push(i0);
+        neighbourChunksUpdatedPositions.push(i1)
+        return [oldChunkContent, neighbourChunkContent]
+    }
+
     swapPositions2xAcid(newChunkContent, updatedPositions, i0, i1){
         var temp=newChunkContent[i0];
         newChunkContent[i0]=0x00000000;
@@ -59,6 +67,15 @@ class Element{
         updatedPositions.push(i1);
         return newChunkContent;
     }
+
+    swapPositions2xAcidBetweenChunks(oldChunkContent, neighbourChunkContent, theChunkUpdatedPositions, neighbourChunksUpdatedPositions, i0, i1){
+        var temp=oldChunkContent[i0];
+        oldChunkContent[i0]=0x00000000;
+        neighbourChunkContent[i1]=temp
+        theChunkUpdatedPositions.push(i0);
+        neighbourChunksUpdatedPositions.push(i1)
+        return [oldChunkContent, neighbourChunkContent]
+    }    
 
 
     swapPositionsPoison(newChunkContent, updatedPositions, i0, i1){
